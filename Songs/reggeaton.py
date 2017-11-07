@@ -1,25 +1,26 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import re
 from os import makedirs
+from sys import argv
 
 class Reggeatton(object):
-	"""docstring for ClassName"""
+	"""This class is perform for recovering song lyrics. """
 	def __init__(self, url):
 
 		self.url = url
+
 
 	def singer(self):
 		try:
 			return str(self.url.split('.com/')[1].split('/')[0])
 		except:
-			raise "url format not correct"
+			raise ValueError("url format not correct").
 
 	def songname(self):
 		try:
 			return str(self.url.split('.com/')[1].split('/')[1].replace('-',' ').replace('/',''))
 		except:
-			raise "url format not correct"
+			raise ValueError("url format not correct").
 		
 	def songlyrics(self,tag,item):
 
@@ -45,20 +46,26 @@ def createdir(path):
 
 def main():
 
+	#we insert the parameters.
 	path=argv[1]
 	url=argv[2]
 	tag=argv[3]
 	item=argv[4]
 
+	#we create a directory where we are going to store the songs.
 	path=createdir(path)
-	a=Reggeatton(url)
-	b=a.songlyrics(tag,item)
-	name=a.songname()
+
+	#we create an instance for our class, and get the info we want.
+	reggeatton=Reggeatton(url)
+	lyrics=reggeatton.songlyrics(tag,item)
+	name=reggeatton.songname()
 	nametxt=name.replace(' ','-')
-	singer=a.singer()
+	singer=reggeatton.singer
+
+    #we insert the data in a txt file.
 	file=open(path+nametxt+'.txt','w',encoding='utf-8')
 	file.write(singer)
-	file.write(b)
+	file.write(lyrics)
 	file.close()
 
 if __name__ == '__main__':
